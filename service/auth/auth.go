@@ -11,7 +11,7 @@ import (
 func Authenticate(username, password, uuid string) (bool, error) {
 	var uid, repoUid int
 	var dbPassword string
-	row := database.DB.QueryRow("SELECT id, password FROM ENTITY__USER WHERE username = ?", username)
+	row := database.DB.QueryRow("SELECT id, password FROM tb_user WHERE username = ?", username)
 	if err := row.Scan(&uid, &dbPassword); err != nil {
 		if err == sql.ErrNoRows {
 			return false, nil
@@ -21,7 +21,7 @@ func Authenticate(username, password, uuid string) (bool, error) {
 	if fmt.Sprintf("%x", sha256.Sum256([]byte(password))) != dbPassword {
 		return false, nil
 	}
-	row = database.DB.QueryRow("SELECT uid FROM ENTITY__REPO WHERE uuid = ?", uuid)
+	row = database.DB.QueryRow("SELECT uid FROM tb_repo WHERE uuid = ?", uuid)
 	if err := row.Scan(&repoUid); err != nil {
 		if err == sql.ErrNoRows {
 			return false, nil

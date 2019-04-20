@@ -33,7 +33,7 @@ func (h *reposHandler) CreateRepo(ctx context.Context, req *repos.CreateRepoReq)
 		return resp, err
 	}
 	_, err := database.DB.Exec(
-		"INSERT INTO ENTITY__REPO (uid, pid, lid, uuid) VALUES (?, ?, ?, ?)", req.Uid, req.Pid, req.Lid, uuid)
+		"INSERT INTO tb_repo (uid, pid, lid, uuid) VALUES (?, ?, ?, ?)", req.Uid, req.Pid, req.Lid, uuid)
 	if err != nil {
 		return resp, err
 	}

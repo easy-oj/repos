@@ -11,12 +11,12 @@ import (
 
 func Submit(uuid string, content map[string]string) (int32, error) {
 	var uid, pid, rid, lid, sid int32
-	row := database.DB.QueryRow("SELECT uid, pid, id, lid FROM ENTITY__REPO WHERE uuid = ?", uuid)
+	row := database.DB.QueryRow("SELECT uid, pid, id, lid FROM tb_repo WHERE uuid = ?", uuid)
 	if err := row.Scan(&uid, &pid, &rid, &lid); err != nil {
 		return sid, err
 	}
 	res, err := database.DB.Exec(
-		"INSERT INTO ENTITY__SUBMISSION (uid, pid, rid, lid, executions) VALUES (?, ?, ?, ?, ?)", uid, pid, rid, lid, "[]")
+		"INSERT INTO tb_submission (uid, pid, rid, lid, executions) VALUES (?, ?, ?, ?, ?)", uid, pid, rid, lid, "[]")
 	if err != nil {
 		return sid, err
 	}
@@ -25,7 +25,7 @@ func Submit(uuid string, content map[string]string) (int32, error) {
 	} else {
 		sid = int32(id)
 	}
-	_, err = database.DB.Exec("UPDATE ENTITY__PROBLEM SET submitted_count = submitted_count + 1 WHERE id = ?", pid)
+	_, err = database.DB.Exec("UPDATE tb_problem SET submitted_count = submitted_count + 1 WHERE id = ?", pid)
 	if err != nil {
 		logs.Error("[Submit] sid = %d, update submitted count error: %s", sid, err.Error())
 	}
